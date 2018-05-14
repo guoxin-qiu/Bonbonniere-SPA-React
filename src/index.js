@@ -1,9 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-// import App from './views/OriginalApp/index';
-import CommentApp from './views/Comment/index';
-import registerServiceWorker from './registerServiceWorker';
+import {render} from 'react-dom';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import TodosApp from './components/Todos/App'
+import rootReducer from './reducers'
 
-ReactDOM.render(<CommentApp />, document.getElementById('root'));
-registerServiceWorker();
+import './index.css';
+
+const store = createStore(rootReducer)
+
+render(
+  <Provider store={store}>
+    <TodosApp />
+  </Provider>,
+  document.getElementById('root')
+)
