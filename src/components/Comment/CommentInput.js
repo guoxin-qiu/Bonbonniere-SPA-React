@@ -1,52 +1,42 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import wrapWithLocalData from '../../wrapWithLocalData'
 
 class CommentInput extends Component {
   static propTypes = {
-    onSubmit: PropTypes.func
+    data: PropTypes.string,
+    onSubmit: PropTypes.func,
+    saveData: PropTypes.func.isRequired
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props)
     this.state = {
-      username: '',
+      username: props.data,
       content: ''
     }
   }
 
-  componentWillMount() {
-    this._loadUsername();
-  }
   componentDidMount() {
-    this.refs.textarea.focus();
+    this.refs.textarea.focus()
   }
+
   handleUsernameBlur(event) {
-    this._saveUsername(event.target.value); 
+    this.props.saveData(event.target.value)
   }
-
-  _saveUsername(username) {
-    localStorage.setItem('username', username);
-  }
-  _loadUsername() {
-    const username = localStorage.getItem('username');
-    if (username) {
-      this.setState({ username: username });
-    }
-  }
-
   handleUsernameChange(event) {
     this.setState({
       username: event.target.value
-    });
+    })
   }
   handleContentChange(event){
     this.setState({
       content: event.target.value
-    });
+    })
   }
   handleSubmit() {
     if (this.props.onSubmit) {
-      const { username, content } = this.state;
+      const { username, content } = this.state
       this.props.onSubmit({ username, content, createdTime: new Date() })
     }
     this.setState({ content: '' })
@@ -79,8 +69,9 @@ class CommentInput extends Component {
           </button>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default CommentInput;
+CommentInput = wrapWithLocalData(CommentInput, 'username')
+export default CommentInput
